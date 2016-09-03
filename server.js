@@ -115,6 +115,11 @@ app.use(route(function(router) {
       skipExpire
     );
   });
+  // delete documents
+  router.delete('/delete/:id', function(request, response, next) {
+    console.log(request.params.id)
+    return documentHandler.handleDelete(request.params.id, response);
+  })
 }));
 
 // Host all /data as a static dir
@@ -122,7 +127,7 @@ app.use(connect_st({
   path: __dirname + '/data',
   content: { maxAge: config.staticMaxAge },
   url: '/data',
-  index: true
+  index: false
 }));
 
 // Then we can loop back - and everything else should be a token,

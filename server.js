@@ -133,6 +133,13 @@ app.use(route(function(router) {
   });
 }));
 
+app.use(connect_st({
+  path: __dirname + '/data',
+  content: { maxAge: config.staticMaxAge },
+  url: '/data',
+  index: false
+}));
+
 // Otherwise, try to match static files
 app.use(connect_st({
   path: __dirname + '/static',

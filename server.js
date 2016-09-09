@@ -116,7 +116,7 @@ function tokenAuth(req, res, next) {
   req.pipe(busboy);
 }
 
-app.use(tokenAuth);
+app.use('/documents', tokenAuth);
 
 // Rate limit all requests
 if (config.rateLimits) {

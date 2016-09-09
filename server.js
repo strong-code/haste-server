@@ -1,13 +1,13 @@
 var http = require('http');
 var url = require('url');
 var fs = require('fs');
-
+var authTokens = require('./tokens.json');
 var winston = require('winston');
 var connect = require('connect');
 var route = require('connect-route');
 var connect_st = require('st');
 var connect_rate_limit = require('connect-ratelimit');
-
+var Busboy = require('busboy');
 var DocumentHandler = require('./lib/document_handler');
 
 // Load the configuration and set some defaults
@@ -87,6 +87,36 @@ var documentHandler = new DocumentHandler({
 });
 
 var app = connect();
+
+// Simple token-based auth middleware
+function tokenAuth(req, res, next) {
+  var busboy = new Busboy({ headers: req.headers });
+  var authed = false;
+
+  busboy.on('field', function (name, val) {
+    if (name === 'uuid') {
+      for (var user in authTokens) {
+        if (authTokens[user] === val) {
+          authed = true;
+        }
+      }
+    }
+  });
+  busboy.on('finish', function () {
+    console.log('finished parsing');
+    if (!authed) {
+      winston.warn('User not authed!');
+      res.writeHead(403);
+      return res.end(JSON.stringify({ error: 'Could not authenticate with UUID' }));
+    } else {
+      console.log('authed!')
+      next();
+    }
+  });
+  req.pipe(busboy);
+}
+
+app.use(tokenAuth);
 
 // Rate limit all requests
 if (config.rateLimits) {

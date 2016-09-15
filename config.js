@@ -34,7 +34,7 @@
 
   "storage": {
     "type": "file",
-    "path": "./data"
+    "path": "./d"
   },
 
   "documents": {

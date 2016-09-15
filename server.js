@@ -105,7 +105,7 @@ app.use(route(function(router) {
     return documentHandler.handleRawGet(key, response, skipExpire);
   });
   // add documents
-  router.post('/documents', function(request, response, next) {
+  router.post('/up', function(request, response, next) {
     return documentHandler.handlePost(request, response);
   });
   // get documents
@@ -126,9 +126,9 @@ app.use(route(function(router) {
 
 // Host all /data as a static dir
 app.use(connect_st({
-  path: __dirname + '/data',
+  path: __dirname + '/d',
   content: { maxAge: config.staticMaxAge },
-  url: '/data',
+  url: '/d',
   index: false
 }));
 
@@ -143,7 +143,7 @@ app.use(route(function(router) {
 
 // And match index
 app.use(connect_st({
-  path: __dirname + '/static',
+  path: __dirname + '/_static',
   content: { maxAge: config.staticMaxAge },
   index: 'index.html'
 }));

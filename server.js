@@ -105,7 +105,7 @@ app.use(route(function(router) {
     return documentHandler.handleRawGet(key, response, skipExpire);
   });
   // add documents
-  router.post('/up', function(request, response, next) {
+  router.post('/d', function(request, response, next) {
     return documentHandler.handlePost(request, response);
   });
   // get documents
